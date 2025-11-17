@@ -4,23 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ce0c418-1b01-482d-8aae-c31f40606ed2" name="Changes" comment="">
+    <list default="true" id="7ce0c418-1b01-482d-8aae-c31f40606ed2" name="Changes" comment="basic semantic search app with automated ETL pipeline">
       <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/semantic_search_app.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/analyze.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blacklist.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/embed.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fetch.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/filter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prepare.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/semantic_search.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/whitelist.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +23,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/e1iaas/semantic_search_app",
+    "accountId": "152cab93-9949-4838-8076-a486258a47fa"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -76,6 +67,18 @@
       <option name="presentableId" value="Default" />
       <updated>1762984026934</updated>
     </task>
+    <task id="LOCAL−00001" summary="basic semantic search app with automated ETL pipeline">
+      <option name="closed" value="true" />
+      <created>1763414845327</created>
+      <option name="number" value="LOCAL−00001" />
+      <option name="presentableId" value="LOCAL−00001" />
+      <updated>1763414845327</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="basic semantic search app with automated ETL pipeline" />
+    <option name="LAST_COMMIT_MESSAGE" value="basic semantic search app with automated ETL pipeline" />
   </component>
 </project>
