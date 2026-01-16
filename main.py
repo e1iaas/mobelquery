@@ -1,24 +1,69 @@
+"""
+Fetch / Extract Data ✅
 
-import spacy
-import pandas as pd
-from filter import process_text
-from prepare import prepare_for_embeddings
-from embed import create_embeddings_local, analyze_data
-from semantic_search import semantic_search
+Pull from DB, API, CSV, JSON, etc.
+
+Keep product metadata intact (IDs, category, SKU).
+
+Normalize / Standardize Data ✅
+
+Lowercase text, standardize units, remove duplicates, normalize categories.
+
+Clean Product Descriptions ✅
+
+Remove junk text (meta fields, repeated boilerplate).
+
+Correct symbols, units, whitespace.
+
+Chunk descriptions into meaningful parts for scoring & embeddings.
+
+Associate Chunks with Products ✅
+
+Map chunks back to product ID or metadata.
+
+This is crucial for scoring and embedding aggregation.
+
+Semantic Scoring / Filtering ✅
+
+Score each chunk using your semantic_score.
+
+Optionally discard low-value chunks (e.g., no domain noun).
+
+Aggregate chunk scores per product if you want product-level scoring.
+
+Generate / Transform Embeddings ✅
+
+Turn the scored chunks (or filtered descriptions) into embeddings.
+
+Store embeddings with product ID + chunk text + score.
+
+Index for Semantic Search ✅
+
+Build a vector index (FAISS, Pinecone, etc.).
+
+At query time: embed query → search → map results back to product.
+
+"""
+
+
 from fetch import fetch_products
-from utils import save_to_csv
-from analyze import analyze_text_words
+from normalize import normalize_raw_product
+from regex_clean import pre_process_regex, post_process_regex, chunk_text
+from load_from_csv import load_from_csv
+from semantic_spacy import run_semantic_score
 
+from write_semantic_products import write_semantic_products
+from utils import save_to_csv
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+#load_dotenv()
 
 
 base_url = 'https://app.partnerboost.com/api.php?mod=datafeed&op=list'
 token = os.getenv("API_KEY")
 limit = 100
-brand_id = 96699
+brand_id = 134627
 
 params_obj = {
         'token': token,
@@ -34,40 +79,87 @@ def run_pipeline():
     print("\n === SEMANTIC SEARCH DATA PIPELINE ====\n")
 
     #fetch data
+    """
     raw_products = fetch_products(base_url,params_obj)
     if not raw_products:
         print("No products fetched")
         return
-    save_to_csv(raw_products, "raw_products.csv")
 
-    #prepare data for embeddings
-    df = prepare_for_embeddings(raw_products)
-    df.to_csv("products_for_embeddings.csv", index=False)
+    #save_to_csv(raw_products, "raw_products.csv")
+    """
 
-    #clean text
-    nlp = spacy.load("en_core_web_sm")
-    df["combined_text_clean"] = df["combined_text"].apply(
-        lambda text: process_text("whitelist.txt", "blacklist.txt", text, nlp)
-    )
-    if 'combined_text_cleaned' in df.columns:
-        df = df.drop(columns=['combined_text_cleaned'])
+    raw_products = load_from_csv("raw_products.csv")
+    #normalized data
+    normalized_products = []
+    all_rows = []
 
-    df.to_csv("products_cleaned_final.csv", index=False)
+    for raw in raw_products:
+        normalized = normalize_raw_product(raw)
+        if normalized:
+            normalized_products.append(normalized)
+
+    for product in normalized_products:
+        raw_description = product.product_raw["description"]
+        raw_sku = product.product_raw["sku"]
+
+        if not raw_description or not raw_sku:
+            continue
 
 
-    #analyze text
-    df_cleaned = pd.read_csv("products_cleaned_final.csv")
-    analyze_text_words(df_cleaned)
 
-    #Create embeddings
-    df = create_embeddings_local("products_cleaned_final.csv")
 
-    return df
+    #access raw description and attach sku from the raw data
+
+
+    #clean raw description
+        pre_description_regex = pre_process_regex(raw_description)
+        post_description_regex = post_process_regex(pre_description_regex)
+
+    #chunk
+        chunked_text = chunk_text(post_description_regex)
+
+        results = []
+
+        for chunk in chunked_text:
+            score,reasons = run_semantic_score(chunk)
+
+            results.append({
+                "chunk": chunk,
+                "score": score,
+            })
+
+        top_chunks = sorted(results, key=lambda x: x["score"], reverse = True)[:3]
+
+        for c in top_chunks:
+
+            rows = {
+                "sku": product.product_sku,
+                "chunk_text": c["chunk"],
+                "semantic_score": c["score"],
+                "category": product.product_category,
+                "price_tier": product.price_tier
+
+            }
+            all_rows.append(rows)
+
+    write_semantic_products("semantic_products.csv",all_rows)
+
+    final_rows = []
+    for row in all_rows:
+        sc = row["semantic_score"] if row["semantic_score"] >= 7 else None
+        ct = row["chunk_text"] if sc else None
+        final_rows.append({
+            "sku": row["sku"],
+            "chunk_text": ct,
+            "semantic_score": sc,
+            "category": row["category"],
+            "price_tier": row["price_tier"]
+        })
+
+    write_semantic_products("final_semantic_product.csv", final_rows)
+
+    #STORE semanitc chunks
 
 if __name__ == "__main__":
     df = run_pipeline()
 
-    # 5️⃣ Semantic search examples
-    semantic_search("dining chair with metal base", top_k=3)
-    semantic_search("modular corner seat", top_k=3)
-    semantic_search("wood sofa", top_k=3)

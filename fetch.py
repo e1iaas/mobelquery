@@ -1,10 +1,11 @@
 import requests
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 import time
 
 @dataclass
 class Product:
     name: str
+    brand: str
     description: str
     category: str
     url: str
@@ -50,6 +51,7 @@ def fetch_products(url, base_param):
                     description=item.get('description', ''),
                     category=item.get('category', ''),
                     url=item.get('url', ''),
+                    brand=item.get('brand', ''),
                     tracking_url=item.get('tracking_url_short', ''),
                     price=float(item.get('price', 0)),
                     currency=item.get('currency', ''),
