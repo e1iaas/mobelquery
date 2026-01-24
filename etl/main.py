@@ -1,49 +1,3 @@
-"""
-Fetch / Extract Data ✅
-
-Pull from DB, API, CSV, JSON, etc.
-
-Keep product metadata intact (IDs, category, SKU).
-
-Normalize / Standardize Data ✅
-
-Lowercase text, standardize units, remove duplicates, normalize categories.
-
-Clean Product Descriptions ✅
-
-Remove junk text (meta fields, repeated boilerplate).
-
-Correct symbols, units, whitespace.
-
-Chunk descriptions into meaningful parts for scoring & embeddings.
-
-Associate Chunks with Products ✅
-
-Map chunks back to product ID or metadata.
-
-This is crucial for scoring and embedding aggregation.
-
-Semantic Scoring / Filtering ✅
-
-Score each chunk using your semantic_score.
-
-Optionally discard low-value chunks (e.g., no domain noun).
-
-Aggregate chunk scores per product if you want product-level scoring.
-
-Generate / Transform Embeddings ✅
-
-Turn the scored chunks (or filtered descriptions) into embeddings.
-
-Store embeddings with product ID + chunk text + score.
-
-Index for Semantic Search ✅
-
-Build a vector index (FAISS, Pinecone, etc.).
-
-At query time: embed query → search → map results back to product.
-
-"""
 
 
 from fetch import fetch_products
@@ -51,13 +5,22 @@ from normalize import normalize_raw_product
 from regex_clean import pre_process_regex, post_process_regex, chunk_text
 from load_from_csv import load_from_csv
 from semantic_spacy import run_semantic_score
+from embed import create_embeddings_local, analyze_data
+
 
 from write_semantic_products import write_semantic_products
 from utils import save_to_csv
 from dotenv import load_dotenv
 import os
+import pandas as pd
+from sentence_transformers import SentenceTransformer 
+
+
+from query import run_query
+
 
 #load_dotenv()
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
 base_url = 'https://app.partnerboost.com/api.php?mod=datafeed&op=list'
@@ -74,7 +37,7 @@ params_obj = {
     }
 
 
-def run_pipeline():
+def run_pipeline(model):
     """RUN ETL pipeline"""
     print("\n === SEMANTIC SEARCH DATA PIPELINE ====\n")
 
@@ -106,8 +69,6 @@ def run_pipeline():
             continue
 
 
-
-
     #access raw description and attach sku from the raw data
 
 
@@ -128,7 +89,7 @@ def run_pipeline():
                 "score": score,
             })
 
-        top_chunks = sorted(results, key=lambda x: x["score"], reverse = True)[:3]
+        top_chunks = sorted(results, key=lambda x: x["score"], reverse = True)[:2]
 
         for c in top_chunks:
 
@@ -146,20 +107,26 @@ def run_pipeline():
 
     final_rows = []
     for row in all_rows:
-        sc = row["semantic_score"] if row["semantic_score"] >= 7 else None
-        ct = row["chunk_text"] if sc else None
+        if row["semantic_score"] < 7:
+            continue
+        
         final_rows.append({
             "sku": row["sku"],
-            "chunk_text": ct,
-            "semantic_score": sc,
+            "chunk_text": row["chunk_text"],
+            "semantic_score": row["semantic_score"],
             "category": row["category"],
             "price_tier": row["price_tier"]
         })
 
     write_semantic_products("final_semantic_product.csv", final_rows)
 
-    #STORE semanitc chunks
+    create_embeddings_local("final_semantic_product.csv")
+    
+
+    run_query(model)
+
+        #STORE semanitc chunks
 
 if __name__ == "__main__":
-    df = run_pipeline()
+    df = run_pipeline(model)
 

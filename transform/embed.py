@@ -17,7 +17,7 @@ def create_embeddings_local(csv_file):
 
     print(f"\n creating embeddings for {len(df)} products...")
     embeddings = model.encode(
-        df['combined_text'].tolist(),
+        df['chunk_text'].tolist(),
         show_progress_bar=True,
         batch_size=32,
         convert_to_numpy=True
@@ -29,7 +29,7 @@ def create_embeddings_local(csv_file):
 
     df['embeddings'] = embeddings.tolist()
 
-    output_file = 'products_with_embeddings.csv'
+    output_file = 'product_embeddings.csv'
     print(f"\n saving to: {output_file}...")
     df.to_csv(output_file, index=False)
     print(f"✓ Saved {len(df)} products with embeddings")
@@ -41,11 +41,9 @@ def create_embeddings_local(csv_file):
 
     print("\n" + "=" * 60)
 
-    return df
 
 def analyze_data(df):
     """Quick data analysis"""
-
     print("=" * 60)
     print(" DATA ANALYSIS")
     print("=" * 60)
@@ -53,20 +51,6 @@ def analyze_data(df):
     print(f"\n Overview:")
     print(f"  Total products: {len(df)}")
     print(f"  Unique SKUs: {df['sku'].nunique()}")
-
-    print(f"\💰 Price Stats:")
-    print(f"  Min: {df['price'].min():.2f}")
-    print(f"  Max: {df['price'].max():.2f}")
-    print(f"  Average: {df['price'].mean():.2f}")
-    print(f"  Median: {df['price'].median():.2f}")
-
-    print(f"\n Availability:")
-    avail_counts = df['availability'].value_counts()
-    print(f"  In stock: {avail_counts.get(True, 0)}")
-    print(f"  Out of stock: {avail_counts.get(False, 0)}")
-
-    print(f"\n️ Price Distribution:")
-    print(df['price_category'].value_counts().to_string())
 
     print(f"\n Text Length:")
     print(f"  Average: {df['text_length'].mean():.0f} characters")
