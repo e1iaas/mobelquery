@@ -75,3 +75,19 @@ CLEANING_LEMMAS = {
 DIMENSION_WORDS = {
     "cm","mm","ft"," ' ' ","width", " '' ", "inches", "inch", ' "" ', "Weight"
 }
+
+
+COLORS = {
+    "black", "white","gray", "grey","red",
+    "blue", "green","yellow","orange","pink",
+    "purple","brown","beige","cream","ivory",
+    "tan","navy","teal","turquoise","cyan",
+    "magenta","maroon","burgundy","olive",
+    "lime","mint","peach","coral","lavender",
+    "violet","indigo","gold","silver","bronze",
+    "copper","charcoal","slate","taupe","khaki",
+    "mustard","sand","camel","chocolate","espresso",
+    "walnut","mahogany","oak","rose","wine","rust",
+    "terracotta"
+
+}

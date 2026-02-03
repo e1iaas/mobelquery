@@ -1,26 +1,21 @@
 
 
-from fetch import fetch_products
-from normalize import normalize_raw_product
-from regex_clean import pre_process_regex, post_process_regex, chunk_text
-from load_from_csv import load_from_csv
-from semantic_spacy import run_semantic_score
-from embed import create_embeddings_local, analyze_data
+from extract.fetch import fetch_products
+from transform.normalize import normalize_raw_product
+from transform.regex_clean import pre_process_regex, post_process_regex, chunk_text
+from utils.load_from_csv import load_from_csv
+from transform.semantic.semantic_spacy import run_semantic_score
+from transform.embed import create_embeddings_local, analyze_data
 
 
-from write_semantic_products import write_semantic_products
-from utils import save_to_csv
+from utils.write_semantic_products import write_semantic_products
+from utils.utils import save_to_csv
 from dotenv import load_dotenv
 import os
 import pandas as pd
-from sentence_transformers import SentenceTransformer 
-
-
-from query import run_query
 
 
 #load_dotenv()
-model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
 base_url = 'https://app.partnerboost.com/api.php?mod=datafeed&op=list'
@@ -37,7 +32,7 @@ params_obj = {
     }
 
 
-def run_pipeline(model):
+def run_pipeline():
     """RUN ETL pipeline"""
     print("\n === SEMANTIC SEARCH DATA PIPELINE ====\n")
 
@@ -51,9 +46,11 @@ def run_pipeline(model):
     #save_to_csv(raw_products, "raw_products.csv")
     """
 
-    raw_products = load_from_csv("raw_products.csv")
+    raw_products = load_from_csv("etl/data/raw/raw_products.csv")
+
     #normalized data
     normalized_products = []
+
     all_rows = []
 
     for raw in raw_products:
@@ -68,8 +65,7 @@ def run_pipeline(model):
         if not raw_description or not raw_sku:
             continue
 
-
-    #access raw description and attach sku from the raw data
+    #TO DO: EXTRACT RAW NAME AND VALUABLE META DATA INDEX THE PRODUCT NAME
 
 
     #clean raw description
@@ -89,7 +85,7 @@ def run_pipeline(model):
                 "score": score,
             })
 
-        top_chunks = sorted(results, key=lambda x: x["score"], reverse = True)[:2]
+        top_chunks = sorted(results, key=lambda x: x["score"], reverse = True)[:1]
 
         for c in top_chunks:
 
@@ -123,10 +119,9 @@ def run_pipeline(model):
     create_embeddings_local("final_semantic_product.csv")
     
 
-    run_query(model)
 
         #STORE semanitc chunks
 
 if __name__ == "__main__":
-    df = run_pipeline(model)
+    df = run_pipeline()
 

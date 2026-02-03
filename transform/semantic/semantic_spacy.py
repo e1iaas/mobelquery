@@ -1,10 +1,15 @@
 import spacy
 from spacy.matcher import DependencyMatcher, Matcher
-from semantic_patterns import patterns, SCORES, pm_high_value_np, domain_noun_list, CORE_DOMAIN_NOUNS
-from semantic_word_list import (FLUFF_NOUNS, MATERIAL_ADJ, MATERIAL_NOUNS, STRUCTURAL_ADJ, FLUFF_ADJ,
+from .semantic_patterns import patterns, SCORES, pm_high_value_np, domain_noun_list, CORE_DOMAIN_NOUNS
+from .semantic_word_list import (FLUFF_NOUNS, MATERIAL_ADJ, MATERIAL_NOUNS, STRUCTURAL_ADJ, FLUFF_ADJ,
                                 QUALITY_CLAIMS, PERFORMANCE_CLAIMS, COMFORT_CLAIMS, CLEANING_LEMMAS, LOGISTICS_WORDS,
-                                DIMENSION_WORDS, DIMENSION_REGEX)
+                                DIMENSION_WORDS, DIMENSION_REGEX, COLORS)
 import json
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+file_path = BASE_DIR /"etl"/ "data" / "raw" /"sentence_split_preview.json"
+
 nlp = spacy.load("en_core_web_sm")
 
 token_matcher = Matcher(nlp.vocab)
@@ -14,7 +19,7 @@ matcher = DependencyMatcher(nlp.vocab)
 matcher.add("SEMANTIC_CORE", patterns)
 token_matcher.add("HIGH_VALUE_NP", [pm_high_value_np])
 
-with open ('sentence_split_preview.json', "r", encoding="utf-8" ) as f:
+with open (file_path, "r", encoding="utf-8" ) as f:
     data = json.load(f)
 
 texts = []
@@ -68,7 +73,9 @@ def score_noun_phrases(doc):
 
         structual_count = sum(1 for t in chunk if t.lemma_.lower() in STRUCTURAL_ADJ)
 
-        modifier_structual_count = modifier_count + structual_count
+        colors_count = sum(1 for t in chunk if t.lemma_.lower() in COLORS)
+
+        modifier_structual_count = modifier_count + structual_count + colors_count
 
         if modifier_structual_count >= 1:
             score += modifier_structual_count * 2
