@@ -31,6 +31,20 @@ params_obj = {
         'limit': limit,
     }
 
+FIELDNAMES_SEMANTIC = [
+    "sku",
+    "chunk_text",
+    "semantic_score",
+    "category",
+    "price_tier",
+]
+
+FIELDNAMES_PRODUCT = [
+    "sku",
+    "name",
+    "brand",
+    "available",
+]
 
 def run_pipeline():
     """RUN ETL pipeline"""
@@ -51,7 +65,15 @@ def run_pipeline():
     #normalized data
     normalized_products = []
 
+    #semantic data stored here before final filtering
     all_rows = []
+
+    #product name and other data from producs
+    product_name_products = []
+
+    stacked_product_names = []
+
+    
 
     for raw in raw_products:
         normalized = normalize_raw_product(raw)
@@ -62,10 +84,23 @@ def run_pipeline():
         raw_description = product.product_raw["description"]
         raw_sku = product.product_raw["sku"]
 
+        raw_name = product.product_name
+        raw_brand = product.product_brand
+        raw_availability = product.availability
+
         if not raw_description or not raw_sku:
             continue
 
     #TO DO: EXTRACT RAW NAME AND VALUABLE META DATA INDEX THE PRODUCT NAME
+        processed_name = pre_process_regex(raw_name)
+
+        product_name_products.append({
+            "sku": raw_sku, 
+            "name": processed_name, 
+            "brand": raw_brand, 
+            "available": raw_availability
+            })
+
 
 
     #clean raw description
@@ -88,7 +123,6 @@ def run_pipeline():
         top_chunks = sorted(results, key=lambda x: x["score"], reverse = True)[:1]
 
         for c in top_chunks:
-
             rows = {
                 "sku": product.product_sku,
                 "chunk_text": c["chunk"],
@@ -99,7 +133,7 @@ def run_pipeline():
             }
             all_rows.append(rows)
 
-    write_semantic_products("semantic_products.csv",all_rows)
+    write_semantic_products("semantic_products.csv",all_rows, FIELDNAMES_SEMANTIC)
 
     final_rows = []
     for row in all_rows:
@@ -114,13 +148,45 @@ def run_pipeline():
             "price_tier": row["price_tier"]
         })
 
-    write_semantic_products("final_semantic_product.csv", final_rows)
+        
 
-    create_embeddings_local("final_semantic_product.csv")
+        
+    #final semantic products
+    write_semantic_products("final_semantic_product.csv", final_rows, FIELDNAMES_SEMANTIC)
+
     
+    write_semantic_products("final_semantic_product_names.csv", product_name_products, FIELDNAMES_PRODUCT)
 
+    #create embeddings
+    create_embeddings_local("final_semantic_product.csv","chunk_text", "embedded_products_final.csv")
 
-        #STORE semanitc chunks
+    create_embeddings_local("final_semantic_product_names.csv", "name", "embedded_embeddings_final.csv")
+    
+    df_names = pd.read_csv("embedded_embeddings_final.csv")
+    df_desc = pd.read_csv("embedded_products_final.csv")
+
+    df_names = df_names.rename(columns={
+        "name": "source_text",
+        "embeddings": "source_embeddings",
+    })
+
+    df_desc = df_desc.rename(columns={
+        "chunk_text": "source_text",
+        "embeddings": "source_embeddings",
+    })
+
+    df_names["source_type"] = "name"
+    df_desc["source_type"] = "description"
+
+    cols = ["sku", "source_type", "source_text", "source_embeddings"]
+
+    df_names = df_names[cols]
+    df_desc = df_desc[cols]
+
+    stacked_df = pd.concat([df_names, df_desc], ignore_index=True)
+
+    
+    stacked_df.to_csv("stacked_product_embeddings.csv")
 
 if __name__ == "__main__":
     df = run_pipeline()

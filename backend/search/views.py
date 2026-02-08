@@ -1,16 +1,37 @@
+print("IMPORTING VIEWS")
+
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.core.paginator import Paginator
 
 from query.query import run_query
 
 
 
+
+
 @api_view(["GET"])
 def search_view(request):
-    query = request.query_params.get("q", "")
+    print("VIEW CALLED")
+    query = request.query_params.get("q", "").strip()
+  
+    if not query:
+        return Response({"Error": "Query not found"}, status=400)
+
     chunk = run_query(query)
+    results = chunk["results"]
+
+    page_size = 5
+
+    paginator = Paginator(results, page_size)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+    
     return Response({
         "query": query,
-        "results": chunk
+        "count": paginator.count,
+        "page": page_obj.number,
+        "page_size": page_size,
+        "results": page_obj.object_list,
     })

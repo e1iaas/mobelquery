@@ -1,0 +1,4 @@
+semantic scorer removes data if score is < 7 might want to change that later since it will be filled with the product names instead
+
+write semantic product function is redunant when pd.DataFrame() exists
+

@@ -1,8 +1,9 @@
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 
+#Embedds DF takes 2 arguments file path and DF-column example: "my_csv_file.csv", "chunk_text" ) 
 
-def create_embeddings_local(csv_file):
+def create_embeddings_local(csv_file,df_data, output_file):
     print("\n" + "=" * 60)
     print("CREATING EMBEDDINGS (LOCAL)")
     print("=" * 60)
@@ -17,7 +18,7 @@ def create_embeddings_local(csv_file):
 
     print(f"\n creating embeddings for {len(df)} products...")
     embeddings = model.encode(
-        df['chunk_text'].tolist(),
+        df[df_data].tolist(),
         show_progress_bar=True,
         batch_size=32,
         convert_to_numpy=True
@@ -29,10 +30,9 @@ def create_embeddings_local(csv_file):
 
     df['embeddings'] = embeddings.tolist()
 
-    output_file = 'product_embeddings.csv'
     print(f"\n saving to: {output_file}...")
     df.to_csv(output_file, index=False)
-    print(f"✓ Saved {len(df)} products with embeddings")
+    print(f" Saved {len(df)} products with embeddings")
 
     print("\n Embedding Stats:")
     print(f"   Vector dimensions: {embeddings.shape[1]}")
