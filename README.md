@@ -25,14 +25,39 @@ pip install -r requirements.txt
 4. Run server
 
 cd backend
-python manage.py runserver
+python manage.py runserver 
 
-5. Query for response
+5. Setup frontend
 
-http://127.0.0.1:8001/api/?q="query"&page=1
+cd frontend
 
-?q= " your query " string
-&page= "optional page number " int
+# Install Node.js (version 18+ recommended)
+
+# Download from https://nodejs.org or install via your OS package manager.
+
+brew install node   #macOS with HomeBrew
+
+sudo apt update.  #ubuntu / debian  
+sudo apt install nodejs npm -y
+
+winget install OpenJS.NodeJS   #Windows (PowerShell with winget)
+
+
+# Verify installation:
+node -v
+npm -v
+
+# Install frontend dependencies
+npm install
+
+# Start development server
+npm run dev
+
+
+6. Using api 
+go to the localhost link  http://localhost:5173/
+query for furniture and return results 
+
 
 
 
@@ -53,6 +78,14 @@ Each result object contains:
 - `description` → Product description
 - `url` → Product URL
 
+Optional fields may be null if data is unavailable:
+
+- `available` → boolean indicating stock availability
+- `image` → product image URL
+- `price` → numeric price value
+- `currency` → ISO currency code
+
+
 Example:
 ```json
 {
@@ -64,15 +97,24 @@ Example:
         {
             "name": "Sophia Modular Sofa",
             "description": "2-piece modular sofa.",
-            "url": "https://chitaliving.com/products/sophia-2-piece-feather-modular-sofa"
+            "url": "https://chitaliving.com/products/sophia-2-piece-feather-modular-sofa",
+            "available": true,
+            "image": "https://example.com/image.jpg",
+            "price": 1299.99,
+            "currency": "USD"
         },
         {
             "name": "Liam Modular Sofa",
             "description": "2-piece oversized modular sofa.",
-            "url": "https://chitaliving.com/products/liam-2-piece-overstuffed-feather-wood-base-sectional"
+            "url": "https://chitaliving.com/products/liam-2-piece-overstuffed-feather-wood-base-sectional",
+            "available": false,
+            "image": null,
+            "price": null,
+            "currency": null
         }
     ]
 }
+
 
 
 
@@ -92,9 +134,12 @@ similar in semantic meaning in a doom scroll content like way
 
 
 
+UPDATE - 2026 - 02 - 18
+-added REACT frontend for the application
+-added extra data to api response
 
 
-CURRENT UPDATE - 2026 - 02 -08
+UPDATE - 2026 - 02 - 08
 -added loader.py handles loading of data and embeddings seperately
 -added pagination to api endpoint and simple error handling
 -updated README 

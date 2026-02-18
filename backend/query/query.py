@@ -22,7 +22,7 @@ def run_query(query):
     query_vec = model.encode([query]).astype("float32")
 
 
-    orint("faiss search")
+    print("faiss search")
     D,I = index.search(query_vec, k=10)
 
     results = {}
@@ -34,6 +34,10 @@ def run_query(query):
 
         raw_row = raw_index[sku]
         raw_url = raw_row["url"]
+        raw_img = raw_row["image"]
+        raw_availability = raw_row["availability"]
+        raw_price = raw_row["price"]
+        raw_currency = raw_row["currency"]
 
         if sku not in results:
             sku_rows = df[df["sku"] == sku]
@@ -44,7 +48,11 @@ def run_query(query):
             results[sku] = {
                 "name": name_text,
                 "description": desc_text,
-                "url": raw_url
+                "url": raw_url,
+                "image": raw_img,
+                "available": raw_availability,
+                "price": raw_price,
+                "currency": raw_currency
             }
 
     final_response = {
