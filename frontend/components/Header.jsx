@@ -22,11 +22,11 @@ export default function Header() {
           {/* Text */}
           <div>
             <h1 className="text-xl font-bold tracking-tight leading-none">
-              <span className="text-stone-800">Furni</span>
+              <span className="text-stone-800">Mobel</span>
               <span className="text-orange-700">Query</span>
             </h1>
             <p className="text-xs text-stone-400 uppercase tracking-widest mt-1 font-medium">
-              Search for all furniture
+              Search for furniture from verified stores
             </p>
           </div>
         </div>
