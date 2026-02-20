@@ -12,7 +12,7 @@ export default function Privacy() {
         <section className="mb-8">
           <h2 className="text-base font-semibold text-gray-900 mb-2">1. Who we are</h2>
           <p className="text-sm leading-relaxed">
-            FurniQuery is a furniture search and comparison website that aggregates product listings from trusted EU-based stores. We are the data controller for the purposes of the General Data Protection Regulation (GDPR). For any privacy-related enquiries, contact us at: <a href="mailto:eliastestdev@gmail.com" className="text-green-800 hover:underline">eliastestdev@gmail.com</a>.
+            MobelQuery is a furniture search and comparison website that aggregates product listings from trusted EU-based stores. We are the data controller for the purposes of the General Data Protection Regulation (GDPR). For any privacy-related enquiries, contact us at: <a href="mailto:eliastestdev@gmail.com" className="text-green-800 hover:underline">eliastestdev@gmail.com</a>.
           </p>
         </section>
 
@@ -31,7 +31,7 @@ export default function Privacy() {
             We do not use first-party cookies for tracking or advertising. However, this site contains affiliate links to third-party EU stores. When you click an affiliate link, the partner store may set their own cookies on your device to track purchases for commission purposes. These cookies are set by the third party and governed by their own privacy policy.
           </p>
           <p className="text-sm leading-relaxed">
-            Under the EU ePrivacy Directive and GDPR, you have the right to refuse cookies. You can manage or delete cookies at any time through your browser settings. Please note that refusing third-party cookies will not affect your ability to use FurniQuery.
+            Under the EU ePrivacy Directive and GDPR, you have the right to refuse cookies. You can manage or delete cookies at any time through your browser settings. Please note that refusing third-party cookies will not affect your ability to use MobelQuery.
           </p>
         </section>
 

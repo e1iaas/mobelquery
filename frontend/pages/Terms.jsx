@@ -11,9 +11,9 @@ export default function Terms() {
 
         {/* 1 */}
         <section className="mb-8">
-          <h2 className="text-base font-semibold text-gray-900 mb-2">1. About FurniQuery</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-2">1. About MobelQuery</h2>
           <p className="text-sm leading-relaxed">
-            FurniQuery is a furniture search and comparison website. We aggregate product listings from trusted EU-based third-party retailers. We do not sell, ship, or handle any products directly. All purchases are made through the respective retailer's website.
+            MobelQuery is a furniture search and comparison website. We aggregate product listings from trusted EU-based third-party retailers. We do not sell, ship, or handle any products directly. All purchases are made through the respective retailer's website.
           </p>
         </section>
 
@@ -21,7 +21,7 @@ export default function Terms() {
         <section className="mb-8">
           <h2 className="text-base font-semibold text-gray-900 mb-2">2. Accuracy of information</h2>
           <p className="text-sm leading-relaxed">
-            Prices, availability, product descriptions, and shipping conditions displayed on FurniQuery are provided by third-party retailers and may change at any time without notice. We make every effort to keep listings up to date, but we cannot guarantee the accuracy or completeness of any product information. Always verify current details on the retailer's website before making a purchase.
+            Prices, availability, product descriptions, and shipping conditions displayed on MobelQuery are provided by third-party retailers and may change at any time without notice. We make every effort to keep listings up to date, but we cannot guarantee the accuracy or completeness of any product information. Always verify current details on the retailer's website before making a purchase.
           </p>
         </section>
 
@@ -29,7 +29,7 @@ export default function Terms() {
         <section className="mb-8">
           <h2 className="text-base font-semibold text-gray-900 mb-2">3. Affiliate disclosure</h2>
           <p className="text-sm leading-relaxed">
-            Some links on FurniQuery are affiliate links. This means we may earn a small commission from the retailer if you make a purchase after clicking a link, at no additional cost to you. Affiliate relationships do not influence which products are shown, how they are ranked, or the price you pay. We only link to reputable EU-based stores.
+            Some links on MobelQuery are affiliate links. This means we may earn a small commission from the retailer if you make a purchase after clicking a link, at no additional cost to you. Affiliate relationships do not influence which products are shown, how they are ranked, or the price you pay. We only link to reputable EU-based stores.
           </p>
           <p className="text-sm leading-relaxed mt-3">
             When you click an affiliate link, the partner retailer may set cookies on your device to track the referral. These cookies are governed by the retailer's own privacy and cookie policy. For more information on how we handle data, see our <a href="/privacy" className="text-green-800 hover:underline">Privacy Policy</a>.
@@ -40,7 +40,7 @@ export default function Terms() {
         <section className="mb-8">
           <h2 className="text-base font-semibold text-gray-900 mb-2">4. Limitation of liability</h2>
           <p className="text-sm leading-relaxed">
-            FurniQuery is provided on an "as is" basis. We do not accept liability for any loss or damage arising from your use of this site or any third-party website linked from it, including but not limited to inaccurate product information, failed transactions, or delivery issues. Your contract for any purchase is solely with the retailer, not with FurniQuery.
+            MobelQuery is provided on an "as is" basis. We do not accept liability for any loss or damage arising from your use of this site or any third-party website linked from it, including but not limited to inaccurate product information, failed transactions, or delivery issues. Your contract for any purchase is solely with the retailer, not with MobelQuery.
           </p>
         </section>
 
@@ -56,7 +56,7 @@ export default function Terms() {
         <section className="mb-8">
           <h2 className="text-base font-semibold text-gray-900 mb-2">6. Intellectual property</h2>
           <p className="text-sm leading-relaxed">
-            Product images and descriptions displayed on FurniQuery are the property of the respective retailers and are used for comparison purposes. The FurniQuery name, logo, and original site content are our intellectual property and may not be reproduced without permission.
+            Product images and descriptions displayed on MobelQuery are the property of the respective retailers and are used for comparison purposes. The MobelQuery name, logo, and original site content are our intellectual property and may not be reproduced without permission.
           </p>
         </section>
 
