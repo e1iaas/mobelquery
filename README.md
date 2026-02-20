@@ -14,6 +14,8 @@ cd semantic_search_app
 
 2. Create enviorment
 
+# USE PYTHON 3.12 for compadability otherwise might run into installation issues with some packages
+
 python3 -m venv venv
 source venv/bin/activate   # Linux/macOS
 venv\Scripts\activate      # Windows
