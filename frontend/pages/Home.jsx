@@ -3,6 +3,8 @@ import SearchBar from "../components/SearchBar"
 import ProductCard from "../components/ProductCard"
 import { useState } from "react"
 
+
+
 export default function Home() {
   const [loading, setLoading] = useState(false)
   const [query, setQuery] = useState("")
@@ -12,7 +14,7 @@ export default function Home() {
     if (loading) return
 
     setLoading(true)
-    fetch(`http://127.0.0.1:8001/api/?q=${encodeURIComponent(query)}`)
+    fetch(`${process.env.API_URL}/api/?q=${encodeURIComponent(query)}`)
       .then(res => res.json())
       .then(json => setData(json.results))
       .catch(err => console.error(err))
