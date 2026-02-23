@@ -14,7 +14,7 @@ export default function Home() {
     if (loading) return
 
     setLoading(true)
-    fetch(`${import.meta.env.VITE_API_URL}/api/?q=${encodeURIComponent(query)}`)
+    fetch(`https://api.mobelquery.com/api/?q=${encodeURIComponent(query)}`)
       .then(res => res.json())
       .then(json => setData(json.results))
       .catch(err => console.error(err))
