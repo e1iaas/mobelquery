@@ -22,7 +22,7 @@ def search_view(request):
     chunk = run_query(query)
     results = chunk["results"]
 
-    page_size = 5
+    page_size = 12
 
     paginator = Paginator(results, page_size)
     page_number = request.GET.get("page", 1)
@@ -31,7 +31,11 @@ def search_view(request):
     return Response({
         "query": query,
         "count": paginator.count,
-        "page": page_obj.number,
-        "page_size": page_size,
+        "page_obj":{
+            "page_number": page_obj.number,
+            "page_size": page_size,
+            "has_next": page_obj.has_next(),
+            "has_prev": page_obj.has_previous()
+        },
         "results": page_obj.object_list,
     })
