@@ -9,9 +9,10 @@ from search.loader import Loader
 
 #add a limit to pagination. k=2
 #handle empty results.   if( I ):
+search_loader = Loader()
 
 def run_query(query):
-    search_loader = Loader()
+    
 
     model = search_loader.model
     index = search_loader.index
