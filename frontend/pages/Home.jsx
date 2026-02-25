@@ -4,6 +4,10 @@ import ProductCard from "../components/ProductCard"
 import SkeletonCard from "../components/SkeletonCard"
 import { useState, useEffect } from "react"
 
+const exampleTags = [
+  "Cozy sofa for small living room",
+  "Minimalist oak dining table",
+]
 
 
 export default function Home() {
@@ -41,10 +45,41 @@ export default function Home() {
 
 return (
   <main className="flex-1 w-full">
+    {/* Hero headline - only show when no results yet */}
+    {data.length === 0 && !loading && (
+      <div className="max-w-2xl mx-auto px-6 pt-16 pb-6 text-center">
+        <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
+          Search furniture the way<br />
+          <span className="text-orange-700">you think about it</span>
+        </h1>
+        <p className="mt-3 text-gray-500 text-base">
+          Describe what you're looking for — we'll find it across verified EU stores.
+        </p>
+      </div>
+    )}
+
     {/* Search bar */}
     <div className="max-w-6xl mx-auto px-6 pt-8 pb-4">
       <SearchBar value={query} onChange={setQuery} onSubmit={handleSearch} />
     </div>
+
+    {data.length === 0 && !loading && (
+  <div className="max-w-2xl mx-auto px-6 pb-6 flex flex-wrap gap-2 justify-center">
+    {exampleTags.map((tag) => (
+      <button
+        key={tag}
+        onClick={() => {
+          setQuery(tag)
+          setSumbittedQuery(tag)
+          fetchProducts(tag, 1)
+        }}
+        className="text-sm text-gray-600 bg-gray-100 hover:bg-orange-50 hover:text-orange-700 border border-gray-200 hover:border-orange-300 px-3 py-1.5 rounded-full transition-colors"
+      >
+        {tag}
+      </button>
+    ))}
+  </div>
+)}
 
     {/* Grid feed */}
     <div className="max-w-6xl mx-auto px-6 pb-8">

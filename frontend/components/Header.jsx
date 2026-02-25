@@ -26,17 +26,11 @@ export default function Header() {
               <span className="text-orange-700">Query</span>
             </h1>
             <p className="text-xs text-stone-400 uppercase tracking-widest mt-1 font-medium">
-              Search for furniture from verified stores
+               from verified stores
             </p>
           </div>
         </div>
           </Link>
-
-        {/* Right: Badge */}
-        <div className="flex items-center gap-2 border border-orange-300 rounded-full px-3 py-1">
-          <span className="w-2 h-2 rounded-full bg-orange-600 animate-pulse" />
-          <span className="text-orange-700 text-xs font-medium tracking-wide">EU Verified</span>
-        </div>
 
       </div>
     </header>

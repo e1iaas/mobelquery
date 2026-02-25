@@ -12,7 +12,7 @@ export default function Privacy() {
         <section className="mb-8">
           <h2 className="text-base font-semibold text-gray-900 mb-2">1. Who we are</h2>
           <p className="text-sm leading-relaxed">
-            MobelQuery is a furniture search and comparison website that aggregates product listings from trusted EU-based stores. We are the data controller for the purposes of the General Data Protection Regulation (GDPR). For any privacy-related enquiries, contact us at: <a href="mailto:eliastestdev@gmail.com" className="text-green-800 hover:underline">eliastestdev@gmail.com</a>.
+            MobelQuery is a furniture search and comparison website that aggregates product listings from trusted EU-based stores. We are the data controller for the purposes of the General Data Protection Regulation (GDPR). For any privacy-related enquiries, contact us at: <a href="mailto:mobelquery@gmail.com" className="text-green-800 hover:underline">mobelquery@gmail.com</a>.
           </p>
         </section>
 
