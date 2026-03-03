@@ -9,6 +9,12 @@ export default function Footer() {
             Mobel<span className="text-orange-400">Query</span>
           </p>
           <div className="flex gap-6">
+             <a href="/blog" className="text-stone-400 text-sm font-medium hover:text-orange-400">
+              Blog  
+            </a>
+            <a href="/about" className="text-stone-400 text-sm font-medium hover:text-orange-400">
+              About  
+            </a>
             <a href="/privacy" className="text-stone-400 text-sm font-medium hover:text-orange-400">
               Privacy Policy 
             </a>
