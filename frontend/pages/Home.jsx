@@ -2,6 +2,7 @@
 import SearchBar from "../components/SearchBar"
 import ProductCard from "../components/ProductCard"
 import SkeletonCard from "../components/SkeletonCard"
+import HowItWorks from "../components/HowItWorks"
 import { useState, useEffect } from "react"
 
 const exampleTags = [
@@ -32,7 +33,10 @@ export default function Home() {
       .finally(() => setLoading(false))
   }
 
+  //add guard for search so skeletoncards doesnt always load on page boot
+  
   useEffect(() => {
+    if(!submittedQuery) return
     fetchProducts(submittedQuery,page.page_number)
   },[page.page_number])
 
@@ -80,6 +84,9 @@ return (
     ))}
   </div>
 )}
+
+{/* How it works */}
+{data.length == 0 && !loading && (<HowItWorks /> )}
 
     {/* Grid feed */}
     <div className="max-w-6xl mx-auto px-6 pb-8">
