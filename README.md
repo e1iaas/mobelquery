@@ -1,161 +1,144 @@
-# Semantic Search App
+# MobelQuery — AI Furniture Search
+A full-stack semantic search application for furniture discovery. Instead of keyword matching, users describe what they're looking for in natural language and the engine returns results based on semantic meaning using cosine similarity over vector embeddings.
 
-A full-stack web application that provides semantic search over product data using sentence embeddings and FAISS. Users can query for Furniture products, and the API returns relevant results with name, description, and URL.
+Live at [mobelquery.com](https://www.mobelquery.com)
 
-by e1iaaas
+Built by [e1iaas](https://github.com/e1iaas)
 
+---
 
-# Installation
+## Architecture
 
-1. clone repo
+**Frontend**
+- React + Tailwind CSS
+- Hosted on Vercel
 
+**Backend**
+- Django REST Framework
+- PostgreSQL + pgvector for vector storage and similarity search
+- Hosted on AWS EC2
+
+**ML Pipeline**
+- SpaCy for semantic scoring and text preprocessing
+- SentenceTransformer `all-MiniLM-L6-v2` for generating 384-dimensional embeddings
+- Cosine similarity search via pgvector
+
+**How it works**
+1. Product descriptions are scored for semantic density using SpaCy
+2. The highest-scoring text is embedded using `all-MiniLM-L6-v2`
+3. Embeddings are stored in PostgreSQL via pgvector
+4. User queries are embedded at runtime and matched against stored vectors using cosine similarity
+5. Results are ranked by semantic relevance and returned via REST API
+
+---
+
+## Local Setup
+
+### Prerequisites
+- Python 3.12
+- Node.js 18+
+- PostgreSQL with pgvector extension
+
+### Backend
+
+```bash
+# Clone repo
 git clone https://github.com/e1iaas/semantic_search_app.git
 cd semantic_search_app
 
-2. Create enviorment
-
-# USE PYTHON 3.12 for compadability otherwise might run into installation issues with some packages
-
+# Create virtual environment
 python3 -m venv venv
 source venv/bin/activate   # Linux/macOS
 venv\Scripts\activate      # Windows
 
-3. Install dependencies
-
+# Install dependencies
 pip install -r requirements.txt
 
-4. Run server
+# Configure environment
+cp .env.example .env
+# Fill in your DB credentials in .env
 
+# Run migrations
 cd backend
-python manage.py runserver 
+python manage.py migrate
 
-5. Setup frontend
+# Load product data
+python manage.py load_products
+python manage.py load_embeddings
 
+# Start server
+python manage.py runserver
+```
+
+### Frontend
+
+```bash
 cd frontend
-
-# Install Node.js (version 18+ recommended)
-
-# Download from https://nodejs.org or install via your OS package manager.
-
-brew install node   #macOS with HomeBrew
-
-sudo apt update.  #ubuntu / debian  
-sudo apt install nodejs npm -y
-
-winget install OpenJS.NodeJS   #Windows (PowerShell with winget)
-
-
-# Verify installation:
-node -v
-npm -v
-
-# Install frontend dependencies
 npm install
-
-# Start development server
 npm run dev
+```
 
+Visit [http://localhost:5173](http://localhost:5173)
 
-6. Using api 
-go to the localhost link  http://localhost:5173/
-query for furniture and return results 
+---
 
+## API
 
+### Search endpoint
+```
+GET /api/?q=<query>&page=<page_number>
+```
 
+**Parameters**
+- `q` — search query string
+- `page` — page number (default: 1)
 
-
-## Response Format
-
-The API returns JSON with the following fields:
-
-- `query` → The search query string
-- `count` → Total number of results
-- `page` → Current page number
-- `page_size` → Number of results per page
-- `results` → Array of result objects
-
-Each result object contains:
-
-- `name` → Product name (can be null)
-- `description` → Product description
-- `url` → Product URL
-
-Optional fields may be null if data is unavailable:
-
-- `available` → boolean indicating stock availability
-- `image` → product image URL
-- `price` → numeric price value
-- `currency` → ISO currency code
-
-
-Example:
+**Response**
 ```json
 {
-    "query": "modular sofa",
-    "count": 2,
-    "page": 1,
-    "page_size": 5,
-    "results": [
-        {
-            "name": "Sophia Modular Sofa",
-            "description": "2-piece modular sofa.",
-            "url": "https://chitaliving.com/products/sophia-2-piece-feather-modular-sofa",
-            "available": true,
-            "image": "https://example.com/image.jpg",
-            "price": 1299.99,
-            "currency": "USD"
-        },
-        {
-            "name": "Liam Modular Sofa",
-            "description": "2-piece oversized modular sofa.",
-            "url": "https://chitaliving.com/products/liam-2-piece-overstuffed-feather-wood-base-sectional",
-            "available": false,
-            "image": null,
-            "price": null,
-            "currency": null
-        }
-    ]
+  "query": "cozy modular sofa",
+  "count": 100,
+  "page_obj": {
+    "page_number": 1,
+    "page_size": 12,
+    "has_next": true,
+    "has_prev": false
+  },
+  "results": [
+    {
+      "name": "Sophia Modular Sofa",
+      "description": "4-piece modular sofa with feather cushions.",
+      "url": "https://example.com/product",
+      "image": "https://example.com/image.jpg",
+      "available": true,
+      "price": "1299.00",
+      "currency": "USD"
+    }
+  ]
 }
+```
 
+---
 
+## Changelog
 
+**2026-03-07**
+- Migrated from FAISS to PostgreSQL + pgvector
+- Added Django ORM models for products and embeddings
+- Replaced in-memory vector search with persistent DB similarity search
+- Added Django management commands for data loading
 
+**2026-02-18**
+- Added React frontend
+- Added pagination to API response
 
+**2026-02-08**
+- Added loader.py for separate data and embedding loading
+- Added pagination and error handling
 
+**2026-02-03**
+- Added Django REST API
+- Improved semantic scoring pipeline
 
-END GOAL: 
-
--full working etl pipeline that fetches data 
-from furnitur apis embeds semantic products descriptions
-pipe to simple CRUD SITE
-
--end user searches for furniture returns results
-similar in semantic meaning in a doom scroll content like way
-
-
-
-
-
-UPDATE - 2026 - 02 - 18
--added REACT frontend for the application
--added extra data to api response
-
-
-UPDATE - 2026 - 02 - 08
--added loader.py handles loading of data and embeddings seperately
--added pagination to api endpoint and simple error handling
--updated README 
-
-UDPATE - 2026 - 02 - 03
--added simple api for testing with DJANGO
--tweaked the seamntic scoring filter, added colors (pos == ADJ) for more accurate scoring
--pipline only return #1 semantic description from product descriptions to embedd
-
-UPDATE - 2026 - 01 - 16
-simple pipeline built fetches TEST data from a csv 
--normalizes the data, 
--chunks product description 
--scores chunks for semantic meaning returns highest score
-
-
-
+**2026-01-16**
+- Initial ETL pipeline with semantic search

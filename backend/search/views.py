@@ -8,9 +8,6 @@ from django.core.paginator import Paginator
 from query.query import run_query
 
 
-
-
-
 @api_view(["GET"])
 def search_view(request):
     print("VIEW CALLED")

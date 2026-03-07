@@ -1,67 +1,42 @@
 print("IMPORTING QUERY")
-import faiss
-import numpy as np
-import pandas as pd
 
-from search.loader import Loader
+from search.models import ProductEmbedding
+from sentence_transformers import SentenceTransformer 
+from pgvector.django import CosineDistance
 
-
-
-#add a limit to pagination. k=2
-#handle empty results.   if( I ):
-search_loader = Loader()
+model = None
 
 def run_query(query):
-    
+    global model
+    if model is None:
+        model = SentenceTransformer("all-MiniLM-L6-v2")
 
-    model = search_loader.model
-    index = search_loader.index
-    df = search_loader.df_stacked_data
-    raw_index = search_loader.df_raw_index_sku
 
     print("encoding model query")
-    query_vec = model.encode([query]).astype("float32")
+    query_vec = model.encode(query).astype("float32")
 
+    embeddings = ProductEmbedding.objects.select_related('product_source').order_by(CosineDistance('embedding_vector', query_vec))[:100]
 
-    print("faiss search")
-    D,I = index.search(query_vec, k=10)
-
-    results = {}
-
-  
-    for idx in I[0]:
-        row = df.iloc[idx]
-        sku = row["sku"]
-
-        raw_row = raw_index[sku]
-        raw_url = raw_row["url"]
-        raw_img = raw_row["image"]
-        raw_availability = raw_row["availability"]
-        raw_price = raw_row["price"]
-        raw_currency = raw_row["currency"]
-
-        if sku not in results:
-            sku_rows = df[df["sku"] == sku]
-
-            name_text = sku_rows[sku_rows["source_type"] == "name"]["source_text"].values
-            desc_text = sku_rows[sku_rows["source_type"] == "description"]["source_text"].values
-
-            results[sku] = {
-                "name": name_text,
-                "description": desc_text,
-                "url": raw_url,
-                "image": raw_img,
-                "available": raw_availability,
-                "price": raw_price,
-                "currency": raw_currency
-            }
-
+    results = []
+     
+    for e in embeddings:
+        product = e.product_source # this is ProductData Object
+        results.append({
+            "name": e.embedding_source_text if e.embedding_source_type == "name" else product.product_name,
+            "description": e.embedding_source_text if e.embedding_source_type == "description" else "",
+            "url": product.product_url,
+            "image": product.product_image,
+            "available": product.product_is_available,
+            "price": product.product_price,
+            "currency": product.product_currency
+        })
+   
     final_response = {
         "query": query,
         "count": len(results),
-        "results": list(results.values())
+        "results": results
     }
-    print("return final result")
+    print("return final result: ", final_response)
     return final_response
 
 
