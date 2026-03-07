@@ -18,7 +18,7 @@ class Command(BaseCommand):
              
             ProductEmbedding.objects.get_or_create(
             embedding_source_type = row["source_type"],
-            product_source= product
+            product_source= product,
             
             embedding_source_text = row["source_text"],
             embedding_vector = row["source_embeddings"],
