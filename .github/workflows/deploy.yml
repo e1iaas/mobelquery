@@ -10,8 +10,9 @@ jobs:
     steps:
       - name: Setup SSH key
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" | base64 -d > /tmp/deploy_key
-          chmod 600 /tmp/deploy_key
+            echo "${{ secrets.EC2_SSH_KEY }}" | base64 -d > /tmp/deploy_key
+            chmod 600 /tmp/deploy_key
+            head -1 /tmp/deploy_key
 
       - name: Execute remote SSH commands
         uses: appleboy/ssh-action@v1
