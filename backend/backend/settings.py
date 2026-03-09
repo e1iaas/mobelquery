@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-x0u_tw2c4e%r=6le&84=^so0qq)ufr8!-)qpdpoz2xms!u%q$6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['api.mobelquery.com','localhost','127.0.0.1']
 
 
 # Application definition
