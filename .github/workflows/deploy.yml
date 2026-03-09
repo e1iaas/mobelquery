@@ -8,17 +8,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Execute remote SSH commands
-        uses: appleboy/ssh-action@v1
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd semantic_search_app
-            git pull origin master
-            source venv/bin/activate
-            pip install -r requirements.txt
-            cd backend
-            python manage.py migrate
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} '
+            cd semantic_search_app &&
+            git pull origin master &&
+            source venv/bin/activate &&
+            pip install -r requirements.txt &&
+            cd backend &&
+            python manage.py migrate &&
             sudo systemctl restart gunicorn
+          '
