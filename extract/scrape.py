@@ -73,7 +73,7 @@ def scrape_all():
         time.sleep(2)
         while True:
             results = scrape_page(url,page)
-            if results:
+            if not results:
                 break
             all_results.extend(results)
             page += 1
