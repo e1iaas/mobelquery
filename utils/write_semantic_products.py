@@ -1,7 +1,5 @@
 import csv
 
-#chunk_id
-
 def write_semantic_products(filepath, rows, FIELDNAMES):
 
     with open(filepath, "w", newline="", encoding="utf-8") as f:

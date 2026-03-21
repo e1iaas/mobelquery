@@ -19,18 +19,6 @@ matcher = DependencyMatcher(nlp.vocab)
 matcher.add("SEMANTIC_CORE", patterns)
 token_matcher.add("HIGH_VALUE_NP", [pm_high_value_np])
 
-with open (file_path, "r", encoding="utf-8" ) as f:
-    data = json.load(f)
-
-texts = []
-
-for item in data:
-    texts.extend(item["sentences"])
-
-texts = texts[:1000]
-
-
-
 
 def count_verbs(doc):
     #count verbs, indicate, marketing fluff

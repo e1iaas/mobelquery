@@ -8,3 +8,5 @@ node_modules/
 *.bin
 *.pt
 DS_Stor
+.github
+docs.txt
