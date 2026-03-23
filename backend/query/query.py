@@ -28,7 +28,8 @@ def run_query(query):
             "image": product.product_image,
             "available": product.product_is_available,
             "price": product.product_price,
-            "currency": product.product_currency
+            "currency": product.product_currency,
+            "brand": product.product_brand
         })
    
     final_response = {
