@@ -101,6 +101,8 @@ return (
             available={d.available}
             price={d.price}
             currency={d.currency}
+            description={d.description}
+            brand={d.brand}
           />
         ))}
       </div>
