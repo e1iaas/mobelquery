@@ -4,6 +4,8 @@ import ProductCard from "../components/ProductCard"
 import SkeletonCard from "../components/SkeletonCard"
 import HowItWorks from "../components/HowItWorks"
 import { useState, useEffect } from "react"
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const exampleTags = [
   "Cozy sofa for small living room",
@@ -23,8 +25,25 @@ export default function Home() {
 
     setLoading(true)
     fetch(`https://api.mobelquery.com/api/?q=${encodeURIComponent(q)}&page=${pageNum}`)
-      .then(res => res.json())
+      .then(res => {
+        if(res.status === 422){
+            toast.error("Products not found with that name", {
+              position: "bottom-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              }); 
+          return null}
+        else{ 
+          return res.json()
+        }
+      })
       .then(json => {
+        if(json === null) return 
         console.log(json)
         setData(json.results ?? [])
         setPage(json.page_obj ?? [])
@@ -45,7 +64,7 @@ export default function Home() {
     setPage({page_number: 1})
     fetchProducts(query,1)
   }
-
+  
 
 return (
   <main className="flex-1 w-full">
@@ -84,6 +103,20 @@ return (
     ))}
   </div>
 )}
+
+  {/* Error message toast */}
+     <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
 
 {/* How it works */}
 {data.length == 0 && !loading && (<HowItWorks /> )}

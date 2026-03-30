@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.core.paginator import Paginator
-
+from search.blocklist import block_list
 from query.query import run_query
 
 
@@ -12,11 +12,19 @@ from query.query import run_query
 def search_view(request):
     print("VIEW CALLED")
     query = request.query_params.get("q", "").strip()
-  
+
     if not query:
         return Response({"Error": "Query not found"}, status=400)
 
+    if query.lower() in block_list:
+        return Response({"Error": "Unprocessable Content"}, status=422)
+
     chunk = run_query(query)
+
+    if "Error" in chunk:
+        return Response({"Error": chunk["Error"]},status=500)
+    
+  
     results = chunk["results"]
 
     page_size = 12

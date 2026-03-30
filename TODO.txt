@@ -1,30 +1,3 @@
-semantic scorer removes data if score is < 7 might want to change that later since it will be filled with the product names instead
-
-write semantic product function is redunant when pd.DataFrame() exists
-
-
-
-NOW--
-*PRODUCT CARD has weird description might only be suitable for actual querying and not to be displayed.
-*Optionally not show description or determnie what the should be used as description. might need to get
-both semantic description for queryying. and one for displaying...
-
-
-- LINK ON ICON TO HOME
-LAZY LOADER
-OPTIMZIE API RESPONSE
-
-THEN PUBLISH 
-
-deploy website
-
-
-I REALIZED THA A SEMANTIC SCORER SHOULDNT HARD FILTER ONLY SEMNATIC DESCRIPTION THERE SHOULD BE LAYERS TO it
-
-HARD SEMANTIC CHUNKS one LAYERS
-
-MARKETING FLUFF ONE LAYERS
-
-PURE TRASH DESCRIPTION LIKE CLEANING AND LOGISTICS IN ONE
-
-beccuase it simulates more real human search
+better readme
+when going or restart keep the previous page
+also keep previous page when going to a link and then going back
