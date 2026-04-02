@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator
 from search.blocklist import block_list
 from query.query import run_query
+import psutil
 
 
 @api_view(["GET"])
@@ -43,4 +44,21 @@ def search_view(request):
             "has_prev": page_obj.has_previous()
         },
         "results": page_obj.object_list,
+    })
+
+
+
+@api_view(["GET"])
+def health_view(request):
+    print("Health View called")
+
+    cpu_health = psutil.cpu_percent(interval=1)
+    memory = psutil.virtual_memory()
+    memory_total = memory.total
+    memory_available = memory.available
+    memory_percent = memory.percent
+
+    return Response({
+        "cpu_percentage": cpu_health,
+        "memory": {"total_memory": round(memory_total / (1024 ** 3), 4), "available_memory": round(memory_available / (1024 ** 3),4), "percent_memory": memory_percent} 
     })
