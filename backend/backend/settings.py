@@ -14,11 +14,11 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv(override=False)
 dbn_token = os.getenv('DB_NAME')
 dbp_token = os.getenv('DB_PASSWORD')
 dbu_token = os.getenv('DB_USER')
-
+dbh_token = os.getenv('DB_HOST')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -95,7 +95,7 @@ DATABASES = {
         'NAME': dbn_token,
         'USER': dbu_token,
         'PASSWORD': dbp_token,
-        'HOST': 'localhost',
+        'HOST': dbh_token,
         'PORT': '5432'
     }
 }

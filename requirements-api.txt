@@ -1,0 +1,11 @@
+django
+djangorestframework
+django-cors-headers
+gunicorn
+psycopg2-binary
+pgvector
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+sentence-transformers
+psutil
+python-dotenv
