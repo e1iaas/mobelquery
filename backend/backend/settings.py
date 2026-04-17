@@ -96,7 +96,10 @@ DATABASES = {
         'USER': dbu_token,
         'PASSWORD': dbp_token,
         'HOST': dbh_token,
-        'PORT': '5432'
+        'PORT': '5432',
+        'TEST': {
+            'NAME': 'test_mobelquery',
+        }
     }
 }
 

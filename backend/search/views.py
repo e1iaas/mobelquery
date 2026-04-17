@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from search.blocklist import block_list
 from query.query import run_query
 import psutil
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,12 @@ def search_view(request):
 
     paginator = Paginator(results, page_size)
     page_number = request.GET.get("page", 1)
+    try:
+        page_number = int(page_number)
+    except ValueError:
+        return Response({"Error": "Invalid page number"}, status=400)
+    if page_number <= 0:
+        return Response({"Error": "Invalid page number"}, status=400)
     page_obj = paginator.get_page(page_number)
     
     return Response({
