@@ -24,7 +24,7 @@ export default function Home() {
     if (loading) return
 
     setLoading(true)
-    fetch(`https://api.mobelquery.com/api/?q=${encodeURIComponent(q)}&page=${pageNum}`)
+    fetch(`https://api.mobelquery.com/api/search/?q=${encodeURIComponent(q)}&page=${pageNum}`)
       .then(res => {
         if(res.status === 422){
             toast.error("Products not found with that name", {
