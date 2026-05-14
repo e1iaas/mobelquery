@@ -1,5 +1,6 @@
 .env.docker
 .env
+.env.local
 venv/
 __pycache__/
 *.pyc
